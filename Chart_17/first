@@ -1,0 +1,51 @@
+import junit.framework.TestCase;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.Year;
+
+public class TimeSeriesTest extends TestCase {
+
+    private TimeSeries series;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        series = new TimeSeries("Test Series");
+    }
+
+    public void testClone() throws CloneNotSupportedException {
+        // Add some data to the series
+        series.add(new Year(2020), 100);
+        series.add(new Year(2021), 200);
+
+        // Clone the series
+        TimeSeries clone = (TimeSeries) series.clone();
+
+        // Check that the clone is not the same object, but has equal content
+        assertNotSame(series, clone);
+        assertEquals(series, clone);
+
+        // Check that changes to the original don't affect the clone
+        series.add(new Year(2022), 300);
+        assertFalse(series.equals(clone));
+    }
+
+    public void testCloneEmptySeries() throws CloneNotSupportedException {
+        // Clone the series
+        TimeSeries clone = (TimeSeries) series.clone();
+
+        // Check that the clone is not the same object, but has equal content
+        assertNotSame(series, clone);
+        assertEquals(series, clone);
+    }
+
+    public void testCloneNullData() throws CloneNotSupportedException {
+        // Set data to null
+        series.clear();
+
+        // Clone the series
+        TimeSeries clone = (TimeSeries) series.clone();
+
+        // Check that the clone is not the same object, but has equal content
+        assertNotSame(series, clone);
+        assertEquals(series, clone);
+    }
+}

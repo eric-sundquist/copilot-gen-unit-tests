@@ -1,0 +1,46 @@
+import org.jfree.data.time.TimePeriod;
+import org.jfree.data.time.SimpleTimePeriod;
+import org.jfree.data.time.TimePeriodValues;
+import junit.framework.TestCase;
+import java.util.Date;
+
+public class TimePeriodValuesTest extends TestCase {
+
+    private TimePeriodValues timePeriodValues;
+
+    protected void setUp() {
+        timePeriodValues = new TimePeriodValues("Test");
+    }
+
+    public void testUpdateBounds() {
+        // Test with valid time periods
+        TimePeriod period1 = new SimpleTimePeriod(new Date(1000), new Date(2000));
+        timePeriodValues.add(period1, 1.0);
+        assertEquals(0, timePeriodValues.getMinStartIndex());
+        assertEquals(0, timePeriodValues.getMaxStartIndex());
+        assertEquals(0, timePeriodValues.getMinMiddleIndex());
+        assertEquals(0, timePeriodValues.getMaxMiddleIndex());
+        assertEquals(0, timePeriodValues.getMinEndIndex());
+        assertEquals(0, timePeriodValues.getMaxEndIndex());
+
+        // Test with time period having start time greater than previous max start time
+        TimePeriod period2 = new SimpleTimePeriod(new Date(3000), new Date(4000));
+        timePeriodValues.add(period2, 2.0);
+        assertEquals(0, timePeriodValues.getMinStartIndex());
+        assertEquals(1, timePeriodValues.getMaxStartIndex());
+        assertEquals(0, timePeriodValues.getMinMiddleIndex());
+        assertEquals(1, timePeriodValues.getMaxMiddleIndex());
+        assertEquals(0, timePeriodValues.getMinEndIndex());
+        assertEquals(1, timePeriodValues.getMaxEndIndex());
+
+        // Test with time period having end time less than previous min end time
+        TimePeriod period3 = new SimpleTimePeriod(new Date(500), new Date(1500));
+        timePeriodValues.add(period3, 3.0);
+        assertEquals(2, timePeriodValues.getMinStartIndex());
+        assertEquals(1, timePeriodValues.getMaxStartIndex());
+        assertEquals(2, timePeriodValues.getMinMiddleIndex());
+        assertEquals(1, timePeriodValues.getMaxMiddleIndex());
+        assertEquals(2, timePeriodValues.getMinEndIndex());
+        assertEquals(1, timePeriodValues.getMaxEndIndex());
+    }
+}
