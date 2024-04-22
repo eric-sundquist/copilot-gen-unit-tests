@@ -1,0 +1,66 @@
+package org.apache.commons.cli;
+
+import junit.framework.TestCase;
+
+public class OptionGroupTest extends TestCase {
+
+    private OptionGroup optionGroup;
+    private Option option1;
+    private Option option2;
+
+    public void setUp() {
+        optionGroup = new OptionGroup();
+        option1 = new Option("a", "first option");
+        option2 = new Option("b", "second option");
+        optionGroup.addOption(option1);
+        optionGroup.addOption(option2);
+    }
+
+    public void testSetSelectedNullOption() {
+        try {
+            optionGroup.setSelected(null);
+            assertNull(optionGroup.getSelected());
+        } catch (AlreadySelectedException e) {
+            fail("Exception should not be thrown when setting selected option to null");
+        }
+    }
+
+    public void testSetSelectedValidOption() {
+        try {
+            optionGroup.setSelected(option1);
+            assertEquals("a", optionGroup.getSelected());
+        } catch (AlreadySelectedException e) {
+            fail("Exception should not be thrown when setting a valid selected option");
+        }
+    }
+
+    public void testSetSelectedInvalidOption() {
+        Option invalidOption = new Option("c", "invalid option");
+        try {
+            optionGroup.setSelected(invalidOption);
+            fail("Exception should be thrown when setting an invalid selected option");
+        } catch (AlreadySelectedException e) {
+            // Expected exception
+        }
+    }
+
+    public void testSetSelectedAlreadySelectedOption() {
+        try {
+            optionGroup.setSelected(option1);
+            optionGroup.setSelected(option1);
+            assertEquals("a", optionGroup.getSelected());
+        } catch (AlreadySelectedException e) {
+            fail("Exception should not be thrown when reselecting the same option");
+        }
+    }
+
+    public void testSetSelectedDifferentOption() {
+        try {
+            optionGroup.setSelected(option1);
+            optionGroup.setSelected(option2);
+            fail("Exception should be thrown when selecting a different option");
+        } catch (AlreadySelectedException e) {
+            // Expected exception
+        }
+    }
+}

@@ -1,0 +1,8 @@
+@workspace I need a comprehensive set of unit tests developed for this #selection of java 1.8 code. Include all necessary imports and packages. Please ensure that:
+
+- The tests cover a wide range of input scenarios, including valid, invalid, boundary cases, and other edge cases to identify potential pitfalls.
+-The tests achieve high coverage, touching on all functions and critical paths in the code.
+- Write unit test using the JUnit 3 testing framework.
+- The tests will be added this testfile  #file.
+
+Reply with code only.
