@@ -1,0 +1,58 @@
+package org.apache.commons.collections4.trie;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+public class PatriciaTrieClearTest extends TestCase {
+
+    private PatriciaTrie<String, Integer> trie;
+
+    public PatriciaTrieClearTest(String testName) {
+        super(testName);
+    }
+
+    public static TestSuite suite() {
+        return new TestSuite(PatriciaTrieClearTest.class);
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        trie = new PatriciaTrie<>();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        trie = null;
+    }
+
+    public void testClearEmptyTrie() {
+        trie.clear();
+        assertTrue(trie.isEmpty());
+    }
+
+    public void testClearSingleElementTrie() {
+        trie.put("test", 1);
+        trie.clear();
+        assertTrue(trie.isEmpty());
+    }
+
+    public void testClearMultipleElementTrie() {
+        trie.put("test1", 1);
+        trie.put("test2", 2);
+        trie.put("test3", 3);
+        trie.clear();
+        assertTrue(trie.isEmpty());
+    }
+
+    public void testClearDoesNotAffectOtherTries() {
+        PatriciaTrie<String, Integer> anotherTrie = new PatriciaTrie<>();
+        anotherTrie.put("test", 1);
+        trie.clear();
+        assertFalse(anotherTrie.isEmpty());
+    }
+}
