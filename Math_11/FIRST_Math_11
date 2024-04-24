@@ -1,0 +1,44 @@
+package org.apache.commons.math3.distribution;
+
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+public class MultivariateNormalDistributionTest {
+    private MultivariateNormalDistribution distribution;
+
+    @Before
+    public void setUp() {
+        double[] means = { 0.0, 0.0 };
+        double[][] covariances = { { 1.0, 0.0 }, { 0.0, 1.0 } };
+        distribution = new MultivariateNormalDistribution(means, covariances);
+    }
+
+    @Test
+    public void testDensityWithValidInput() {
+        double[] vals = { 0.0, 0.0 };
+        double expectedDensity = 1 / (2 * Math.PI);
+        Assert.assertEquals(expectedDensity, distribution.density(vals), 1e-9);
+    }
+
+    @Test(expected = DimensionMismatchException.class)
+    public void testDensityWithInvalidInput() {
+        double[] vals = { 0.0 };
+        distribution.density(vals);
+    }
+
+    @Test
+    public void testDensityWithBoundaryInput() {
+        double[] vals = { Double.MAX_VALUE, Double.MAX_VALUE };
+        double expectedDensity = 0.0;
+        Assert.assertEquals(expectedDensity, distribution.density(vals), 1e-9);
+    }
+
+    @Test
+    public void testDensityWithNegativeInput() {
+        double[] vals = { -1.0, -1.0 };
+        double expectedDensity = Math.exp(-1) / (2 * Math.PI);
+        Assert.assertEquals(expectedDensity, distribution.density(vals), 1e-9);
+    }
+}
