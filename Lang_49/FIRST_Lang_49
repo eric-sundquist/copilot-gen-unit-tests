@@ -1,0 +1,72 @@
+package org.apache.commons.lang.math;
+
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+public class FractionTest extends TestCase {
+    public FractionTest(String name) {
+        super(name);
+    }
+
+    public static Test suite() {
+        TestSuite suite = new TestSuite(FractionTest.class);
+        suite.setName("Fraction Tests");
+        return suite;
+    }
+
+    public void setUp() {
+    }
+
+    // Test for valid fraction creation
+    public void testValidFractionCreation() {
+        try {
+            Fraction fraction = new Fraction(1, 2);
+            assertNotNull(fraction);
+        } catch (Exception e) {
+            fail("Exception should not be thrown for valid fraction");
+        }
+    }
+
+    // Test for invalid fraction creation
+    public void testInvalidFractionCreation() {
+        try {
+            Fraction fraction = new Fraction(1, 0);
+            fail("Exception should be thrown for invalid fraction");
+        } catch (ArithmeticException e) {
+            // Expected exception
+        }
+    }
+
+    // Test for boundary case
+    public void testBoundaryCase() {
+        try {
+            Fraction fraction = new Fraction(Integer.MAX_VALUE, 1);
+            assertNotNull(fraction);
+        } catch (Exception e) {
+            fail("Exception should not be thrown for boundary case");
+        }
+    }
+
+    // Test for edge case
+    public void testEdgeCase() {
+        try {
+            Fraction fraction = new Fraction(1, Integer.MIN_VALUE);
+            fail("Exception should be thrown for edge case");
+        } catch (ArithmeticException e) {
+            // Expected exception
+        }
+    }
+
+    // Test for all functions and critical paths
+    public void testFunctionsAndCriticalPaths() {
+        try {
+            Fraction fraction = new Fraction(1, 2);
+            assertEquals(0.5, fraction.doubleValue());
+            assertEquals(0, fraction.compareTo(new Fraction(1, 2)));
+            assertEquals(1, fraction.compareTo(new Fraction(1, 3)));
+            assertEquals(-1, fraction.compareTo(new Fraction(2, 3)));
+        } catch (Exception e) {
+            fail("Exception should not be thrown for valid operations");
+        }
+    }
+}
