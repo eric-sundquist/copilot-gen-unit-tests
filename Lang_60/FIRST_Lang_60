@@ -1,0 +1,66 @@
+package org.apache.commons.lang.text;
+
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+
+public class StrBuilderTest extends TestCase {
+
+    private StrBuilder strBuilder;
+
+    protected void setUp() {
+        strBuilder = new StrBuilder();
+    }
+
+    public void testAppendNull() {
+        strBuilder.append(null);
+        assertEquals("Append null should result in empty string", "", strBuilder.toString());
+    }
+
+    public void testAppendEmpty() {
+        strBuilder.append("");
+        assertEquals("Append empty string should result in empty string", "", strBuilder.toString());
+    }
+
+    public void testAppend() {
+        strBuilder.append("test");
+        assertEquals("Append string should result in the same string", "test", strBuilder.toString());
+    }
+
+    public void testClear() {
+        strBuilder.append("test");
+        strBuilder.clear();
+        assertEquals("Clear should result in empty string", "", strBuilder.toString());
+    }
+
+    public void testLength() {
+        strBuilder.append("test");
+        assertEquals("Length should be equal to the length of the string", 4, strBuilder.length());
+    }
+
+    public void testSetLength() {
+        strBuilder.append("test");
+        strBuilder.setLength(2);
+        assertEquals("Set length should truncate the string", "te", strBuilder.toString());
+    }
+
+    public void testSetLengthLonger() {
+        strBuilder.append("test");
+        strBuilder.setLength(6);
+        assertEquals("Set length longer should pad the string", "test  ", strBuilder.toString());
+    }
+
+    public static void main(String[] args) {
+        TestRunner.run(suite());
+    }
+
+    public static Test suite() {
+        TestSuite suite = new TestSuite(StrBuilderTest.class);
+        suite.setName("StrBuilder Tests");
+        return suite;
+    }
+
+    public StrBuilderTest(String name) {
+        super(name);
+    }
+}
