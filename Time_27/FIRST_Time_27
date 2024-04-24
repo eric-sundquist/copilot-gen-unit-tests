@@ -1,0 +1,47 @@
+package org.joda.time.format;
+
+import junit.framework.TestCase;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.joda.time.Period;
+
+public class TestPeriodFormatterBuilder extends TestCase {
+
+    public void testToFormatter() {
+        List<Object> elementPairs = new ArrayList<>();
+        Separator sep = new Separator(":", new SimplePeriodPrinter(), new SimplePeriodParser());
+        elementPairs.add(sep);
+        elementPairs.add(new SimplePeriodPrinter());
+        elementPairs.add(new SimplePeriodParser());
+
+        // Test with valid printer and parser
+        PeriodFormatter formatter = PeriodFormatterBuilder.toFormatter(elementPairs, false, false);
+        assertNotNull(formatter);
+
+        // Test with no printer
+        formatter = PeriodFormatterBuilder.toFormatter(elementPairs, true, false);
+        assertNotNull(formatter);
+
+        // Test with no parser
+        formatter = PeriodFormatterBuilder.toFormatter(elementPairs, false, true);
+        assertNotNull(formatter);
+
+        // Test with neither printer nor parser
+        try {
+            formatter = PeriodFormatterBuilder.toFormatter(elementPairs, true, true);
+            fail("Expected an IllegalStateException to be thrown");
+        } catch (IllegalStateException e) {
+            // Expected exception
+        }
+
+        // Test with empty elementPairs
+        elementPairs.clear();
+        try {
+            formatter = PeriodFormatterBuilder.toFormatter(elementPairs, false, false);
+            fail("Expected an IllegalStateException to be thrown");
+        } catch (IllegalStateException e) {
+            // Expected exception
+        }
+    }
+}
