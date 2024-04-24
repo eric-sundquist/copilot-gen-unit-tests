@@ -1,0 +1,47 @@
+package org.apache.commons.math.util;
+
+import junit.framework.TestCase;
+
+public class MathUtilsTest extends TestCase {
+
+    public void testGcdZeroAndPositiveNumber() {
+        assertEquals(5, MathUtils.gcd(0, 5));
+    }
+
+    public void testGcdZeroAndNegativeNumber() {
+        assertEquals(5, MathUtils.gcd(0, -5));
+    }
+
+    public void testGcdPositiveNumbers() {
+        assertEquals(5, MathUtils.gcd(15, 10));
+    }
+
+    public void testGcdNegativeNumbers() {
+        assertEquals(5, MathUtils.gcd(-15, -10));
+    }
+
+    public void testGcdPositiveAndNegative() {
+        assertEquals(5, MathUtils.gcd(15, -10));
+    }
+
+    public void testGcdNegativeAndPositive() {
+        assertEquals(5, MathUtils.gcd(-15, 10));
+    }
+
+    public void testGcdZeroAndZero() {
+        assertEquals(0, MathUtils.gcd(0, 0));
+    }
+
+    public void testGcdMaxIntAndMaxInt() {
+        assertEquals(Integer.MAX_VALUE, MathUtils.gcd(Integer.MAX_VALUE, Integer.MAX_VALUE));
+    }
+
+    public void testGcdMinIntAndMinInt() {
+        try {
+            MathUtils.gcd(Integer.MIN_VALUE, Integer.MIN_VALUE);
+            fail("Expecting ArithmeticException");
+        } catch (ArithmeticException ex) {
+            // expected
+        }
+    }
+}
