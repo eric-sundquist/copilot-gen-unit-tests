@@ -1,0 +1,71 @@
+package org.jsoup.helper;
+
+import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
+import org.junit.Test;
+
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+
+import static org.junit.Assert.*;
+
+public class DataUtilTest {
+
+    @Test
+    public void testParseByteDataWithNullCharset() {
+        String baseUri = "http://example.com";
+        Parser parser = Parser.htmlParser();
+        ByteBuffer byteData = Charset.forName("UTF-8").encode("Test data");
+        Document doc = DataUtil.parseByteData(byteData, null, baseUri, parser);
+        assertNotNull(doc);
+        assertEquals("UTF-8", doc.outputSettings().charset().displayName());
+    }
+
+    @Test
+    public void testParseByteDataWithCharset() {
+        String baseUri = "http://example.com";
+        Parser parser = Parser.htmlParser();
+        ByteBuffer byteData = Charset.forName("UTF-16").encode("Test data");
+        Document doc = DataUtil.parseByteData(byteData, "UTF-16", baseUri, parser);
+        assertNotNull(doc);
+        assertEquals("UTF-16", doc.outputSettings().charset().displayName());
+    }
+
+    @Test
+    public void testParseByteDataWithInvalidCharset() {
+        String baseUri = "http://example.com";
+        Parser parser = Parser.htmlParser();
+        ByteBuffer byteData = Charset.forName("UTF-8").encode("Test data");
+        try {
+            DataUtil.parseByteData(byteData, "Invalid Charset", baseUri, parser);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            // Expected
+        }
+    }
+
+    @Test
+    public void testParseByteDataWithCharsetInMeta() {
+        String baseUri = "http://example.com";
+        Parser parser = Parser.htmlParser();
+        String html = "<html><head><meta charset='UTF-16'></head><body>Test data</body></html>";
+        ByteBuffer byteData = Charset.forName("UTF-8").encode(html);
+        Document doc = DataUtil.parseByteData(byteData, null, baseUri, parser);
+        assertNotNull(doc);
+        assertEquals("UTF-16", doc.outputSettings().charset().displayName());
+    }
+
+    @Test
+    public void testParseByteDataWithBOM() {
+        String baseUri = "http://example.com";
+        Parser parser = Parser.htmlParser();
+        String html = "\uFEFF<html><body>Test data</body></html>";
+        ByteBuffer byteData = Charset.forName("UTF-8").encode(html);
+        Document doc = DataUtil.parseByteData(byteData, "UTF-8", baseUri, parser);
+        assertNotNull(doc);
+        assertEquals("UTF-8", doc.outputSettings().charset().displayName());
+        Elements body = doc.select("body");
+        assertEquals("Test data", body.text());
+    }
+}
