@@ -1,0 +1,104 @@
+package org.apache.commons.lang3.time;
+
+import junit.framework.TestCase;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
+
+public class FastDateFormatTest extends TestCase {
+
+    public void testParsePattern() {
+        FastDateFormat fdf = new FastDateFormat("yyyy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithInvalidPattern() {
+        try {
+            FastDateFormat fdf = new FastDateFormat("invalid-pattern", TimeZone.getDefault(), Locale.getDefault());
+            fdf.parsePattern();
+            fail("Expected an IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            // expected behavior
+        }
+    }
+
+    public void testParsePatternWithShortYear() {
+        FastDateFormat fdf = new FastDateFormat("yy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithMonthText() {
+        FastDateFormat fdf = new FastDateFormat("yyyy-MMMM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithShortMonthText() {
+        FastDateFormat fdf = new FastDateFormat("yyyy-MMM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithDayInMonth() {
+        FastDateFormat fdf = new FastDateFormat("yyyy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithHourInDay() {
+        FastDateFormat fdf = new FastDateFormat("yyyy-MM-dd HH:mm:ss", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithMinuteInHour() {
+        FastDateFormat fdf = new FastDateFormat("yyyy-MM-dd HH:mm:ss", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithSecondInMinute() {
+        FastDateFormat fdf = new FastDateFormat("yyyy-MM-dd HH:mm:ss", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithMillisecond() {
+        FastDateFormat fdf = new FastDateFormat("yyyy-MM-dd HH:mm:ss.SSS", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithDayInWeek() {
+        FastDateFormat fdf = new FastDateFormat("EEEE, yyyy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithDayInYear() {
+        FastDateFormat fdf = new FastDateFormat("D, yyyy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithWeekInYear() {
+        FastDateFormat fdf = new FastDateFormat("w, yyyy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithWeekInMonth() {
+        FastDateFormat fdf = new FastDateFormat("W, yyyy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithAmPmMarker() {
+        FastDateFormat fdf = new FastDateFormat("a, yyyy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithTimeZone() {
+        FastDateFormat fdf = new FastDateFormat("z, yyyy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithTimeZoneValue() {
+        FastDateFormat fdf = new FastDateFormat("Z, yyyy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+
+    public void testParsePatternWithLiteralText() {
+        FastDateFormat fdf = new FastDateFormat("'Today is' yyyy-MM-dd", TimeZone.getDefault(), Locale.getDefault());
+        assertNotNull(fdf.parsePattern());
+    }
+}
