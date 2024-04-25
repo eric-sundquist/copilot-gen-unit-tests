@@ -1,0 +1,63 @@
+package org.jsoup.nodes;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class EntitiesTest {
+
+    @Test
+    public void testUnescapeNoEntities() {
+        String input = "This is a test.";
+        String result = Entities.unescape(input);
+        assertEquals(input, result);
+    }
+
+    @Test
+    public void testUnescapeNumericEntities() {
+        String input = "This is a test &#38;.";
+        String result = Entities.unescape(input);
+        assertEquals("This is a test &.", result);
+    }
+
+    @Test
+    public void testUnescapeHexEntities() {
+        String input = "This is a test &#x26;.";
+        String result = Entities.unescape(input);
+        assertEquals("This is a test &.", result);
+    }
+
+    @Test
+    public void testUnescapeNamedEntities() {
+        String input = "This is a test &amp;.";
+        String result = Entities.unescape(input);
+        assertEquals("This is a test &.", result);
+    }
+
+    @Test
+    public void testUnescapeInvalidEntities() {
+        String input = "This is a test &invalid;.";
+        String result = Entities.unescape(input);
+        assertEquals(input, result);
+    }
+
+    @Test
+    public void testUnescapeEmptyString() {
+        String input = "";
+        String result = Entities.unescape(input);
+        assertEquals(input, result);
+    }
+
+    @Test
+    public void testUnescapeNullString() {
+        String input = null;
+        String result = Entities.unescape(input);
+        assertNull(result);
+    }
+
+    @Test
+    public void testUnescapeOutOfRangeEntities() {
+        String input = "This is a test &#100000;.";
+        String result = Entities.unescape(input);
+        assertEquals(input, result);
+    }
+}
