@@ -1,0 +1,52 @@
+package org.jsoup.nodes;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class AttributesTest {
+    private Attributes attributes;
+
+    @Before
+    public void setUp() {
+        attributes = new Attributes();
+    }
+
+    @Test
+    public void testRemoveIgnoreCaseValidKey() {
+        String key = "Key";
+        attributes.put(key, "Value");
+        attributes.removeIgnoreCase(key);
+        assertFalse(attributes.hasKey(key));
+    }
+
+    @Test
+    public void testRemoveIgnoreCaseInvalidKey() {
+        String key = "InvalidKey";
+        attributes.removeIgnoreCase(key);
+        assertFalse(attributes.hasKey(key));
+    }
+
+    @Test
+    public void testRemoveIgnoreCaseCaseInsensitiveKey() {
+        String key = "Key";
+        attributes.put(key, "Value");
+        attributes.removeIgnoreCase(key.toLowerCase());
+        assertFalse(attributes.hasKey(key));
+    }
+
+    @Test
+    public void testRemoveIgnoreCaseEmptyKey() {
+        String key = "";
+        attributes.put("Key", "Value");
+        attributes.removeIgnoreCase(key);
+        assertTrue(attributes.hasKey("Key"));
+    }
+
+    @Test
+    public void testRemoveIgnoreCaseNullAttributes() {
+        attributes = new Attributes();
+        attributes.removeIgnoreCase("Key");
+        assertFalse(attributes.hasKey("Key"));
+    }
+}
