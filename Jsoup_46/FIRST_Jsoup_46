@@ -1,0 +1,32 @@
+package org.jsoup.nodes;
+
+import org.jsoup.Jsoup;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class EntitiesTest {
+    @Test
+    public void testEscape() {
+        Document.OutputSettings out = new Document.OutputSettings();
+        StringBuilder accum = new StringBuilder();
+
+        // Test with valid input
+        Entities.escape(accum, "valid input", out, true, true, true);
+        assertEquals("Expected output", accum.toString());
+
+        // Test with invalid input
+        accum = new StringBuilder();
+        Entities.escape(accum, "<invalid input>", out, true, true, true);
+        assertEquals("Expected output", accum.toString());
+
+        // Test with boundary cases
+        accum = new StringBuilder();
+        Entities.escape(accum, "", out, true, true, true);
+        assertEquals("Expected output", accum.toString());
+
+        // Test with edge cases
+        accum = new StringBuilder();
+        Entities.escape(accum, "edge case input", out, true, true, true);
+        assertEquals("Expected output", accum.toString());
+    }
+}
