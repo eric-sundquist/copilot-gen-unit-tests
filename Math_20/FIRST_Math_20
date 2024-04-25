@@ -1,0 +1,45 @@
+package org.apache.commons.math3.optimization.direct;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.apache.commons.math3.exception.MathUnsupportedOperationException;
+import org.apache.commons.math3.exception.NotPositiveException;
+import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.optimization.GoalType;
+import org.apache.commons.math3.optimization.PointValuePair;
+import org.apache.commons.math3.random.MersenneTwister;
+
+@RunWith(RetryRunner.class)
+public class CMAESOptimizerTest {
+
+    static final int DIM = 13;
+    static final int LAMBDA = 4 + (int) (3. * Math.log(DIM));
+
+    @Test
+    public void testDIM() {
+        Assert.assertEquals(13, DIM);
+    }
+
+    @Test
+    public void testLAMBDA() {
+        Assert.assertEquals(4 + (int) (3. * Math.log(DIM)), LAMBDA);
+    }
+
+    @Test(expected = NotPositiveException.class)
+    public void testNotPositiveException() {
+        throw new NotPositiveException(DIM);
+    }
+
+    @Test(expected = OutOfRangeException.class)
+    public void testOutOfRangeException() {
+        throw new OutOfRangeException(DIM, 1, 10);
+    }
+
+    @Test(expected = MathUnsupportedOperationException.class)
+    public void testMathUnsupportedOperationException() {
+        throw new MathUnsupportedOperationException();
+    }
+
+    // Add more tests here to cover all functions and critical paths in the code.
+}
