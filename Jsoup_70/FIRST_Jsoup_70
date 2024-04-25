@@ -1,0 +1,71 @@
+package org.jsoup.nodes;
+
+import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+
+public class ElementTest {
+
+    @Test
+    public void testPreserveWhitespaceWithNullNode() {
+        assertFalse(Element.preserveWhitespace(null));
+    }
+
+    @Test
+    public void testPreserveWhitespaceWithNonElementNode() {
+        Node node = new DataNode("data");
+        assertFalse(Element.preserveWhitespace(node));
+    }
+
+    @Test
+    public void testPreserveWhitespaceWithElementNodeNoPreserveWhitespace() {
+        Element el = new Element(Tag.valueOf("div"), "");
+        assertFalse(Element.preserveWhitespace(el));
+    }
+
+    @Test
+    public void testPreserveWhitespaceWithElementNodePreserveWhitespace() {
+        Element el = new Element(Tag.valueOf("pre"), "");
+        assertTrue(Element.preserveWhitespace(el));
+    }
+
+    @Test
+    public void testPreserveWhitespaceWithElementNodeNestedNoPreserveWhitespace() {
+        Element el = new Element(Tag.valueOf("div"), "");
+        el.appendChild(new Element(Tag.valueOf("div"), ""));
+        assertFalse(Element.preserveWhitespace(el.childNode(0)));
+    }
+
+    @Test
+    public void testPreserveWhitespaceWithElementNodeNestedPreserveWhitespace() {
+        Element el = new Element(Tag.valueOf("div"), "");
+        el.appendChild(new Element(Tag.valueOf("pre"), ""));
+        assertTrue(Element.preserveWhitespace(el.childNode(0)));
+    }
+
+    @Test
+    public void testPreserveWhitespaceWithElementNodeDeepNestedPreserveWhitespace() {
+        Element el = new Element(Tag.valueOf("div"), "");
+        Element child = el;
+        for (int i = 0; i < 5; i++) {
+            Element newChild = new Element(Tag.valueOf("div"), "");
+            child.appendChild(newChild);
+            child = newChild;
+        }
+        child.appendChild(new Element(Tag.valueOf("pre"), ""));
+        assertTrue(Element.preserveWhitespace(el.childNode(0)));
+    }
+
+    @Test
+    public void testPreserveWhitespaceWithElementNodeTooDeepNestedPreserveWhitespace() {
+        Element el = new Element(Tag.valueOf("div"), "");
+        Element child = el;
+        for (int i = 0; i < 6; i++) {
+            Element newChild = new Element(Tag.valueOf("div"), "");
+            child.appendChild(newChild);
+            child = newChild;
+        }
+        child.appendChild(new Element(Tag.valueOf("pre"), ""));
+        assertFalse(Element.preserveWhitespace(el.childNode(0)));
+    }
+}
