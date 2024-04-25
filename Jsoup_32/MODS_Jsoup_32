@@ -1,0 +1,15 @@
+package org.jsoup.nodes;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class ElementTest {
+    // Assuming that the Element class is in the same package
+    private Element element;
+
+    @Test(expected = NullPointerException.class)
+    public void testClone_nullElement() {
+        element = null;
+        Element clone = element.clone();
+    }
+}

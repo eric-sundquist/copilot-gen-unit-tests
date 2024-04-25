@@ -1,0 +1,45 @@
+package org.jsoup.nodes;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class ElementTest {
+    // Assuming that the Element class is in the same package
+    private Element element;
+
+    @Before
+    public void setUp() {
+        element = new Element(Tag.valueOf("div"), "");
+    }
+
+    @Test
+    public void testClone_validElement() {
+        Element clone = element.clone();
+        assertNotNull(clone);
+        assertNotSame(element, clone);
+        assertNull(clone.classNames);
+    }
+
+    @Test
+    public void testClone_elementWithClassNames() {
+        element.addClass("test");
+        Element clone = element.clone();
+        assertNotNull(clone);
+        assertNull(clone.classNames);
+    }
+
+    @Test
+    public void testClone_elementWithMultipleClassNames() {
+        element.addClass("test1");
+        element.addClass("test2");
+        Element clone = element.clone();
+        assertNotNull(clone);
+        assertNull(clone.classNames);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testClone_nullElement() {
+        element = null;
+        Element clone = element.clone();
+    }
+}
