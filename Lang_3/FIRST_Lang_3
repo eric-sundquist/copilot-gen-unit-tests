@@ -1,0 +1,57 @@
+package org.apache.commons.lang3.math;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+import java.math.BigInteger;
+import java.math.BigDecimal;
+
+public class NumberUtilsTest {
+
+    @Test
+    public void testCreateNumber() {
+        // Test with null
+        assertNull(NumberUtils.createNumber(null));
+
+        // Test with blank string
+        try {
+            NumberUtils.createNumber("");
+            fail("Expected NumberFormatException");
+        } catch (NumberFormatException e) {
+            // Expected
+        }
+
+        // Test with hexadecimal numbers
+        assertEquals(BigInteger.valueOf(255), NumberUtils.createNumber("0xFF"));
+        assertEquals(BigInteger.valueOf(-255), NumberUtils.createNumber("-0xFF"));
+        assertEquals(BigInteger.valueOf(255), NumberUtils.createNumber("#FF"));
+        assertEquals(BigInteger.valueOf(-255), NumberUtils.createNumber("-#FF"));
+
+        // Test with octal numbers
+        assertEquals(Integer.valueOf(8), NumberUtils.createNumber("010"));
+        assertEquals(Long.valueOf(9007199254740992L), NumberUtils.createNumber("01000000000000000000000"));
+
+        // Test with decimal numbers
+        assertEquals(Integer.valueOf(10), NumberUtils.createNumber("10"));
+        assertEquals(Long.valueOf(10), NumberUtils.createNumber("10L"));
+        assertEquals(Float.valueOf(10), NumberUtils.createNumber("10F"));
+        assertEquals(Double.valueOf(10), NumberUtils.createNumber("10D"));
+
+        // Test with decimal point
+        assertEquals(Float.valueOf(10.5f), NumberUtils.createNumber("10.5F"));
+        assertEquals(Double.valueOf(10.5), NumberUtils.createNumber("10.5D"));
+        assertEquals(new BigDecimal("10.5"), NumberUtils.createNumber("10.5"));
+
+        // Test with exponent
+        assertEquals(Float.valueOf(1050), NumberUtils.createNumber("10.5e2F"));
+        assertEquals(Double.valueOf(1050), NumberUtils.createNumber("10.5e2D"));
+        assertEquals(new BigDecimal("1050"), NumberUtils.createNumber("10.5e2"));
+
+        // Test with invalid number
+        try {
+            NumberUtils.createNumber("10.5e2Z");
+            fail("Expected NumberFormatException");
+        } catch (NumberFormatException e) {
+            // Expected
+        }
+    }
+}
