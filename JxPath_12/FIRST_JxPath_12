@@ -1,0 +1,59 @@
+package org.apache.commons.jxpath.ri.model;
+
+import org.w3c.dom.Node;
+import org.apache.commons.jxpath.ri.Compiler;
+import org.apache.commons.jxpath.ri.model.dom.DOMNodePointer;
+import org.apache.commons.jxpath.ri.model.dom.NodeNameTest;
+import org.apache.commons.jxpath.ri.model.dom.NodeTest;
+import org.apache.commons.jxpath.ri.model.dom.NodeTypeTest;
+import org.apache.commons.jxpath.ri.model.dom.ProcessingInstructionTest;
+import org.apache.commons.jxpath.ri.QName;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class ExternalXMLNamespaceTest extends JXPathTestCase {
+
+    @Test
+    public void testNodeNameTest() {
+        Node node = createNode(Node.ELEMENT_NODE);
+        NodeNameTest test = createNodeNameTest("test", "http://test.com", false);
+        assertTrue(DOMNodePointer.testNode(node, test));
+    }
+
+    @Test
+    public void testNodeTypeTest() {
+        Node node = createNode(Node.ELEMENT_NODE);
+        NodeTypeTest test = createNodeTypeTest(Compiler.NODE_TYPE_NODE);
+        assertTrue(DOMNodePointer.testNode(node, test));
+    }
+
+    @Test
+    public void testProcessingInstructionTest() {
+        Node node = createNode(Node.PROCESSING_INSTRUCTION_NODE);
+        ProcessingInstructionTest test = createProcessingInstructionTest("test");
+        assertTrue(DOMNodePointer.testNode(node, test));
+    }
+
+    @Test
+    public void testInvalidNodeNameTest() {
+        Node node = createNode(Node.TEXT_NODE);
+        NodeNameTest test = createNodeNameTest("test", "http://test.com", false);
+        assertFalse(DOMNodePointer.testNode(node, test));
+    }
+
+    @Test
+    public void testInvalidNodeTypeTest() {
+        Node node = createNode(Node.TEXT_NODE);
+        NodeTypeTest test = createNodeTypeTest(Compiler.NODE_TYPE_NODE);
+        assertFalse(DOMNodePointer.testNode(node, test));
+    }
+
+    @Test
+    public void testInvalidProcessingInstructionTest() {
+        Node node = createNode(Node.TEXT_NODE);
+        ProcessingInstructionTest test = createProcessingInstructionTest("test");
+        assertFalse(DOMNodePointer.testNode(node, test));
+    }
+
+    // Add more tests to cover all edge cases and boundary conditions
+}

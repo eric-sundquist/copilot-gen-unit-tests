@@ -1,0 +1,35 @@
+package org.apache.commons.jxpath.ri.model;
+
+import junit.framework.TestCase;
+import org.apache.commons.jxpath.JXPathContext;
+import org.apache.commons.jxpath.ri.model.beans.DocumentContainer;
+
+public class ExternalXMLNamespaceTest extends TestCase {
+
+    public void testCreateDocumentContainer() {
+        DocumentContainer container = createDocumentContainer(DocumentContainer.MODEL_DOM);
+        assertNotNull(container);
+        assertFalse(container.isNamespaceAware());
+    }
+
+    public void testDoTest() {
+        doTest("/ElementA/@A:myAttr", DocumentContainer.MODEL_DOM, "Mytype");
+        doTest("/ElementA/B:ElementB", DocumentContainer.MODEL_DOM, "MY VALUE");
+    }
+
+    public void testDoTestAttribute() {
+        doTestAttribute(DocumentContainer.MODEL_DOM);
+    }
+
+    public void testDoTestElement() {
+        doTestElement(DocumentContainer.MODEL_DOM);
+    }
+
+    public void testAttributeDOM() {
+        testAttributeDOM();
+    }
+
+    public void testElementDOM() {
+        testElementDOM();
+    }
+}
