@@ -1,0 +1,37 @@
+package org.apache.commons.jxpath.ri.compiler;
+
+import org.apache.commons.jxpath.JXPathContext;
+import org.apache.commons.jxpath.JXPathTestCase;
+import org.apache.commons.jxpath.Variables;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class CoreOperationRelationalExpressionTest extends JXPathTestCase {
+
+    @Test
+    public void testComputeValue() {
+        CoreOperationRelationalExpression coreOperationRelationalExpression = new CoreOperationRelationalExpression();
+        EvalContext context = new EvalContext();
+
+        // Test with valid inputs
+        context.setArgs(new Object[] { Boolean.TRUE, Boolean.FALSE });
+        assertEquals(Boolean.FALSE, coreOperationRelationalExpression.computeValue(context));
+
+        context.setArgs(new Object[] { Boolean.FALSE, Boolean.TRUE });
+        assertEquals(Boolean.TRUE, coreOperationRelationalExpression.computeValue(context));
+
+        // Test with invalid inputs
+        context.setArgs(new Object[] { null, Boolean.TRUE });
+        assertEquals(Boolean.FALSE, coreOperationRelationalExpression.computeValue(context));
+
+        context.setArgs(new Object[] { Boolean.TRUE, null });
+        assertEquals(Boolean.FALSE, coreOperationRelationalExpression.computeValue(context));
+
+        // Test with boundary cases
+        context.setArgs(new Object[] { Boolean.TRUE, Boolean.TRUE });
+        assertEquals(Boolean.TRUE, coreOperationRelationalExpression.computeValue(context));
+
+        context.setArgs(new Object[] { Boolean.FALSE, Boolean.FALSE });
+        assertEquals(Boolean.TRUE, coreOperationRelationalExpression.computeValue(context));
+    }
+}

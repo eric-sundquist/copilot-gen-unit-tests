@@ -1,0 +1,40 @@
+import junit.framework.TestCase;
+import org.apache.commons.jxpath.JXPathContext;
+import org.apache.commons.jxpath.Variables;
+
+public class CoreOperationTest extends TestCase {
+
+    private JXPathContext context;
+
+    public void setUp() {
+        context = JXPathContext.newContext(null);
+        Variables vars = context.getVariables();
+        vars.declareVariable("integer", new Integer(1));
+        vars.declareVariable("array", new double[] { 0.25, 0.5, 0.75 });
+        vars.declareVariable("nan", new Double(Double.NaN));
+    }
+
+    public void testInfoSetTypes() {
+        assertEquals(new Double(1.0), context.getValue("1"));
+        assertEquals(new Double(-1.0), context.getValue("-1"));
+        assertEquals(new Double(4.0), context.getValue("2 + 2"));
+        assertEquals(new Double(1.0), context.getValue("3 - 2"));
+        assertEquals(new Double(7.0), context.getValue("1 + 2 + 3 - 4 + 5"));
+        assertEquals(new Double(3.0 * 2.0), context.getValue("3 * 2"));
+        assertEquals(new Double(3.0 / 2.0), context.getValue("3 div 2"));
+        assertEquals(new Double(1.0), context.getValue("5 mod 2"));
+        assertEquals(new Double(1.0), context.getValue("5.9 mod 2.1"));
+        assertEquals(new Double(1.0), context.getValue("5 mod -2"));
+        assertEquals(new Double(-1.0), context.getValue("-5 mod 2"));
+        assertEquals(new Double(-1.0), context.getValue("-5 mod -2"));
+        assertEquals(Boolean.TRUE, context.getValue("1 < 2"));
+        assertEquals(Boolean.FALSE, context.getValue("1 > 2"));
+        assertEquals(Boolean.TRUE, context.getValue("1 <= 1"));
+        assertEquals(Boolean.FALSE, context.getValue("1 >= 2"));
+        assertEquals(Boolean.FALSE, context.getValue("3 > 2 > 1"));
+        assertEquals(Boolean.TRUE, context.getValue("3 > 2 and 2 > 1"));
+        assertEquals(Boolean.FALSE, context.getValue("3 > 2 and 2 < 1"));
+        assertEquals(Boolean.TRUE, context.getValue("3 < 2 or 2 > 1"));
+        assertEquals(Boolean.FALSE, context.getValue("3 < 2 or 2 < 1"));
+    }
+}
