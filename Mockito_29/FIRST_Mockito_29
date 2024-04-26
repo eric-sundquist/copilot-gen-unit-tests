@@ -1,0 +1,44 @@
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
+public class NPEWithCertainMatchersTest extends TestBase {
+    @Mock IMethods mock;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testMethodWithValidInput() {
+        mock.simpleMethod("valid input");
+        verify(mock).simpleMethod(anyString());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testMethodWithNullInput() {
+        mock.simpleMethod(null);
+        verify(mock, never()).simpleMethod(anyString());
+    }
+
+    @Test
+    public void testMethodWithEmptyString() {
+        mock.simpleMethod("");
+        verify(mock).simpleMethod(anyString());
+    }
+
+    @Test
+    public void testMethodWithBoundaryInput() {
+        String boundaryInput = new String(new char[1000]).replace("\0", "a");
+        mock.simpleMethod(boundaryInput);
+        verify(mock).simpleMethod(anyString());
+    }
+}
