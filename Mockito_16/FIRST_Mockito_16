@@ -1,0 +1,43 @@
+package org.mockitousage.bugs;
+
+import org.junit.Test;
+import org.mockito.MockSettings;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+
+public class StubbingMocksThatAreConfiguredToReturnMocksTest {
+
+    interface MockedInterface {
+        String method();
+    }
+
+    @Test
+    public void testMockWithDefaultSettings() {
+        MockedInterface mock = Mockito.mock(MockedInterface.class);
+        assertNotNull(mock);
+    }
+
+    @Test
+    public void testMockWithCustomSettings() {
+        MockSettings settings = withSettings().name("customMock").defaultAnswer(RETURNS_SMART_NULLS);
+        MockedInterface mock = Mockito.mock(MockedInterface.class, settings);
+        assertNotNull(mock);
+    }
+
+    @Test
+    public void testMockMethodInvocation() {
+        MockSettings settings = withSettings().name("customMock").defaultAnswer(RETURNS_SMART_NULLS);
+        MockedInterface mock = Mockito.mock(MockedInterface.class, settings);
+        when(mock.method()).thenReturn("Hello, Mockito!");
+        assertEquals("Hello, Mockito!", mock.method());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testMockMethodInvocationThrowsException() {
+        MockSettings settings = withSettings().name("customMock").defaultAnswer(RETURNS_SMART_NULLS);
+        MockedInterface mock = Mockito.mock(MockedInterface.class, settings);
+        when(mock.method()).thenThrow(new RuntimeException());
+        mock.method();
+    }
+}
