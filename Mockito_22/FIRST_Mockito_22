@@ -1,0 +1,36 @@
+package org.mockito.internal.matchers;
+
+import org.mockitoutil.TestBase;
+import org.junit.Test;
+import static org.mockito.internal.matchers.Equality.areEqual;
+
+public class EqualityTest extends TestBase {
+    
+    @Test
+    public void testAreEqualWithEqualObjects() {
+        assertTrue(areEqual("test", "test"));
+        assertTrue(areEqual(1, 1));
+        assertTrue(areEqual(null, null));
+    }
+
+    @Test
+    public void testAreEqualWithUnequalObjects() {
+        assertFalse(areEqual("test", "test1"));
+        assertFalse(areEqual(1, 2));
+        assertFalse(areEqual(null, "test"));
+        assertFalse(areEqual("test", null));
+    }
+
+    @Test
+    public void testAreEqualWithDifferentTypes() {
+        assertFalse(areEqual("1", 1));
+        assertFalse(areEqual(1, "1"));
+    }
+
+    @Test
+    public void testAreEqualWithBoundaryCases() {
+        assertTrue(areEqual(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        assertTrue(areEqual(Integer.MIN_VALUE, Integer.MIN_VALUE));
+        assertFalse(areEqual(Integer.MAX_VALUE, Integer.MIN_VALUE));
+    }
+}
