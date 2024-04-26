@@ -1,0 +1,30 @@
+import org.junit.Test;
+import static org.junit.Assert.*;
+import java.util.*;
+
+public class GenericMetadataSupportTest {
+
+    @Test
+    public void testGenericsNest() {
+        GenericsNest<String> nest = new GenericsNest<String>() {
+            public Set<Number> remove(Object key) { return null; }
+            public List<? super Integer> returning_wildcard_with_class_lower_bound() { return null; }
+            public List<? super String> returning_wildcard_with_typeVar_lower_bound() { return null; }
+            public List<? extends String> returning_wildcard_with_typeVar_upper_bound() { return null; }
+            public String returningK() { return null; }
+            public <O extends String> List<O> paramType_with_type_params() { return null; }
+            public <S, T extends S> T two_type_params() { return null; }
+            public <O extends String> O typeVar_with_type_params() { return null; }
+        };
+
+        assertNotNull(nest);
+    }
+
+    @Test
+    public void testStringList() {
+        StringList list = new StringList();
+        list.add("test");
+        assertEquals(1, list.size());
+        assertEquals("test", list.get(0));
+    }
+}
