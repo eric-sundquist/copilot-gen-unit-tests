@@ -1,0 +1,46 @@
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import junit.framework.TestCase;
+
+public class RootNameTest extends TestCase {
+
+    private RootBeanBase rootBeanBase;
+    private XmlMapper xmlMapper;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        rootBeanBase = new RootBeanBase();
+        xmlMapper = new XmlMapper();
+    }
+
+    public void testRootBeanBaseDefaultConstructor() {
+        assertEquals("123", rootBeanBase.value);
+    }
+
+    public void testRootBeanBaseConstructorWithValidValue() {
+        rootBeanBase = new RootBeanBase("456");
+        assertEquals("456", rootBeanBase.value);
+    }
+
+    public void testRootBeanBaseConstructorWithEmptyValue() {
+        rootBeanBase = new RootBeanBase("");
+        assertEquals("", rootBeanBase.value);
+    }
+
+    public void testRootBeanBaseConstructorWithNullValue() {
+        rootBeanBase = new RootBeanBase(null);
+        assertNull(rootBeanBase.value);
+    }
+
+    public void testRootBeanBaseSerialization() throws Exception {
+        String xml = xmlMapper.writeValueAsString(rootBeanBase);
+        assertTrue(xml.contains("<RootBeanBase>"));
+        assertTrue(xml.contains("<value>123</value>"));
+    }
+
+    public void testRootBeanBaseDeserialization() throws Exception {
+        String xml = "<RootBeanBase><value>456</value></RootBeanBase>";
+        RootBeanBase deserialized = xmlMapper.readValue(xml, RootBeanBase.class);
+        assertEquals("456", deserialized.value);
+    }
+}
