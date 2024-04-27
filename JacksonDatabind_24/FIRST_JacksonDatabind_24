@@ -1,0 +1,57 @@
+package com.fasterxml.jackson.databind.cfg;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker.Std;
+import com.fasterxml.jackson.databind.introspect.BasicClassIntrospector;
+import com.fasterxml.jackson.databind.introspect.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
+import com.fasterxml.jackson.databind.util.ClassUtil;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
+import com.fasterxml.jackson.core.Base64Variants;
+import junit.framework.TestCase;
+
+public class BaseSettingsTest extends TestCase {
+
+    public void testWithDateFormat() {
+        BaseSettings baseSettings = new BaseSettings(new BasicClassIntrospector(), new JacksonAnnotationIntrospector(), 
+            VisibilityChecker.Std.defaultInstance(), PropertyNamingStrategy.LOWER_CAMEL_CASE, TypeFactory.defaultInstance(), 
+            new StdTypeResolverBuilder(), new SimpleDateFormat("yyyy-MM-dd"), ClassUtil.createInstance(HandlerInstantiator.class, false), 
+            Locale.getDefault(), TimeZone.getDefault(), Base64Variants.getDefaultVariant());
+
+        DateFormat newDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        BaseSettings newBaseSettings = baseSettings.withDateFormat(newDateFormat);
+
+        assertEquals(newDateFormat, newBaseSettings.getDateFormat());
+        assertNotSame(baseSettings, newBaseSettings);
+    }
+
+    public void testWithDateFormatSameInstance() {
+        BaseSettings baseSettings = new BaseSettings(new BasicClassIntrospector(), new JacksonAnnotationIntrospector(), 
+            VisibilityChecker.Std.defaultInstance(), PropertyNamingStrategy.LOWER_CAMEL_CASE, TypeFactory.defaultInstance(), 
+            new StdTypeResolverBuilder(), new SimpleDateFormat("yyyy-MM-dd"), ClassUtil.createInstance(HandlerInstantiator.class, false), 
+            Locale.getDefault(), TimeZone.getDefault(), Base64Variants.getDefaultVariant());
+
+        BaseSettings newBaseSettings = baseSettings.withDateFormat(baseSettings.getDateFormat());
+
+        assertEquals(baseSettings.getDateFormat(), newBaseSettings.getDateFormat());
+        assertSame(baseSettings, newBaseSettings);
+    }
+
+    public void testWithDateFormatNull() {
+        BaseSettings baseSettings = new BaseSettings(new BasicClassIntrospector(), new JacksonAnnotationIntrospector(), 
+            VisibilityChecker.Std.defaultInstance(), PropertyNamingStrategy.LOWER_CAMEL_CASE, TypeFactory.defaultInstance(), 
+            new StdTypeResolverBuilder(), new SimpleDateFormat("yyyy-MM-dd"), ClassUtil.createInstance(HandlerInstantiator.class, false), 
+            Locale.getDefault(), TimeZone.getDefault(), Base64Variants.getDefaultVariant());
+
+        BaseSettings newBaseSettings = baseSettings.withDateFormat(null);
+
+        assertEquals(null, newBaseSettings.getDateFormat());
+        assertNotSame(baseSettings, newBaseSettings);
+    }
+}
