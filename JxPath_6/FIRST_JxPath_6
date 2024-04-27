@@ -1,0 +1,37 @@
+import junit.framework.TestCase;
+import org.apache.commons.jxpath.JXPathContext;
+import org.apache.commons.jxpath.JXPathTestCase;
+import org.apache.commons.jxpath.TestMixedModelBean;
+import org.apache.commons.jxpath.Variables;
+
+public class VariableTest extends JXPathTestCase {
+    private JXPathContext context;
+
+    public void setUp() {
+        context = JXPathContext.newContext(new TestMixedModelBean());
+    }
+
+    public void testValidVariable() {
+        context.getVariables().declareVariable("validVariable", "validValue");
+        TestCase.assertEquals("validValue", context.getValue("$validVariable"));
+    }
+
+    public void testInvalidVariable() {
+        try {
+            context.getValue("$invalidVariable");
+            TestCase.fail("Expected an exception for an undefined variable");
+        } catch (Exception e) {
+            // Expected
+        }
+    }
+
+    public void testBoundaryVariable() {
+        context.getVariables().declareVariable("boundaryVariable", Integer.MAX_VALUE);
+        TestCase.assertEquals(Integer.MAX_VALUE, context.getValue("$boundaryVariable"));
+    }
+
+    public void testEdgeCaseVariable() {
+        context.getVariables().declareVariable("edgeCaseVariable", null);
+        TestCase.assertNull(context.getValue("$edgeCaseVariable"));
+    }
+}
