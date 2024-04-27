@@ -1,0 +1,49 @@
+package com.fasterxml.jackson.databind.creators;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.TokenBuffer;
+import junit.framework.TestCase;
+
+public class TestCreatorsDelegating extends TestCase {
+
+    private TokenBuffer tokenBuffer;
+    private JsonParser jsonParser;
+    private DeserializationContext deserializationContext;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        tokenBuffer = new TokenBuffer(new ObjectMapper());
+        jsonParser = new JsonFactory().createParser("{}");
+        deserializationContext = new ObjectMapper().getDeserializationContext();
+    }
+
+    public void testDeserializeWithNoFieldName() throws Exception {
+        jsonParser.nextToken();
+        tokenBuffer.deserialize(jsonParser, deserializationContext);
+        assertEquals(JsonToken.END_OBJECT, jsonParser.getCurrentToken());
+    }
+
+    public void testDeserializeWithFieldName() throws Exception {
+        jsonParser = new JsonFactory().createParser("{\"field\":\"value\"}");
+        jsonParser.nextToken();
+        tokenBuffer.deserialize(jsonParser, deserializationContext);
+        assertEquals(JsonToken.END_OBJECT, jsonParser.getCurrentToken());
+    }
+
+    public void testDeserializeWithInvalidToken() throws Exception {
+        jsonParser = new JsonFactory().createParser("[\"array\"]");
+        jsonParser.nextToken();
+        try {
+            tokenBuffer.deserialize(jsonParser, deserializationContext);
+            fail("Expected an exception to be thrown");
+        } catch (Exception e) {
+            assertTrue(e.getMessage()
+                    .contains("Expected END_OBJECT after copying contents of a JsonParser into TokenBuffer, got "));
+        }
+    }
+}

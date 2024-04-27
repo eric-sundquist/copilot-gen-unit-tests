@@ -1,0 +1,46 @@
+package com.fasterxml.jackson.databind.creators;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.util.TokenBuffer;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+public class TestCreatorsDelegating extends TestCase {
+
+    // Assuming there are methods in the class to be tested
+    private TestCreatorsDelegating testCreatorsDelegating;
+
+    public void setUp() {
+        testCreatorsDelegating = new TestCreatorsDelegating();
+    }
+
+    public void tearDown() {
+        testCreatorsDelegating = null;
+    }
+
+    public void testMethod1() {
+        // Test method1 here
+        // Use assertions to verify the expected outcome
+    }
+
+    public void testMethod2() {
+        // Test method2 here
+        // Use assertions to verify the expected outcome
+    }
+
+    // Add more test methods as needed
+
+    public static Test suite() {
+        return new TestSuite(TestCreatorsDelegating.class);
+    }
+
+    public static void main(String args[]) {
+        junit.textui.TestRunner.run(suite());
+    }
+}
