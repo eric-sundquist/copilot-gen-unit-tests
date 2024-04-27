@@ -1,0 +1,42 @@
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+import org.apache.commons.jxpath.AbstractFactory;
+import org.apache.commons.jxpath.xml.DocumentContainer;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+public class DOMModelTest extends TestCase {
+
+    public DOMModelTest(String name) {
+        super(name);
+    }
+
+    public static Test suite() {
+        return new TestSuite(DOMModelTest.class);
+    }
+
+    public void testGetModel() {
+        DOMModelTest domModelTest = new DOMModelTest("testGetModel");
+        String model = domModelTest.getModel();
+        assertEquals(DocumentContainer.MODEL_DOM, model);
+    }
+
+    public void testGetAbstractFactory() {
+        DOMModelTest domModelTest = new DOMModelTest("testGetAbstractFactory");
+        AbstractFactory factory = domModelTest.getAbstractFactory();
+        assertTrue(factory instanceof TestDOMFactory);
+    }
+
+    public void testGetXMLSignature() {
+        DOMModelTest domModelTest = new DOMModelTest("testGetXMLSignature");
+        try {
+            domModelTest.getXMLSignature(new Object(), true, true, true, true);
+            fail("Expected UnsupportedOperationException to be thrown");
+        } catch (UnsupportedOperationException e) {
+            assertEquals("Unimplemented method 'getXMLSignature'", e.getMessage());
+        }
+    }
+}
