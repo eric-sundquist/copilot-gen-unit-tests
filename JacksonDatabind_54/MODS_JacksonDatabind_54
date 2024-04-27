@@ -1,0 +1,42 @@
+import org.junit.Test;
+import static org.junit.Assert.*;
+import java.util.concurrent.atomic.AtomicReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class TestJDKAtomicTypesTest {
+
+    @Test
+    public void testLCStringWrapper() {
+        TestJDKAtomicTypes.LCStringWrapper wrapper = new TestJDKAtomicTypes.LCStringWrapper();
+        assertNull(wrapper.value);
+
+        wrapper.value = new AtomicReference<>("Test");
+        assertEquals("Test", wrapper.value.get());
+
+        wrapper.value = new AtomicReference<>(null);
+        assertNull(wrapper.value.get());
+    }
+
+    @Test
+    public void testIssue1256Bean() {
+        TestJDKAtomicTypes.Issue1256Bean bean = new TestJDKAtomicTypes.Issue1256Bean();
+        assertNotNull(bean.a);
+        assertNotNull(bean.b);
+
+        bean.a.set("TestA");
+        bean.b.set("TestB");
+        assertEquals("TestA", bean.a.get());
+        assertEquals("TestB", bean.b.get());
+
+        bean.a.set(null);
+        bean.b.set(null);
+        assertNull(bean.a.get());
+        assertNull(bean.b.get());
+    }
+
+    @Test
+    public void testObjectMapper() {
+        ObjectMapper mapper = new TestJDKAtomicTypes().MAPPER;
+        assertNotNull(mapper);
+    }
+}
