@@ -1,0 +1,62 @@
+package com.fasterxml.jackson.databind.interop;
+
+import com.fasterxml.jackson.databind.*;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+public class IllegalTypesCheckTest extends TestCase {
+
+    private IllegalTypesCheckTest testInstance;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        testInstance = new IllegalTypesCheckTest();
+    }
+
+    public void testXalanTypes1599() {
+        try {
+            testInstance.testXalanTypes1599();
+            fail("Expected an JsonMappingException to be thrown");
+        } catch (JsonMappingException e) {
+            assertTrue(e.getMessage().contains("Illegal type"));
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+    }
+
+    public void testTestTypes1737() {
+        try {
+            testInstance._testTypes1737("com.mchange.v2.c3p0.JndiRefForwardingDataSource");
+            fail("Expected an JsonMappingException to be thrown");
+        } catch (JsonMappingException e) {
+            assertTrue(e.getMessage().contains("Illegal type"));
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+    }
+
+    public void testVerifySecurityException() {
+        try {
+            testInstance._verifySecurityException(new JsonMappingException("Test"), "com.mchange.v2.c3p0.JndiRefForwardingDataSource");
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+    }
+
+    public void testVerifyException() {
+        try {
+            testInstance._verifyException(new JsonMappingException("Test"), JsonMappingException.class, "Test");
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+    }
+
+    public static TestSuite suite() {
+        return new TestSuite(IllegalTypesCheckTest.class);
+    }
+
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(suite());
+    }
+}
