@@ -1,0 +1,65 @@
+package org.apache.commons.jxpath.ri.model;
+
+import org.apache.commons.jxpath.JXPathContext;
+import org.apache.commons.jxpath.JXPathTestCase;
+import org.apache.commons.jxpath.ri.model.dom.DOMNodePointer;
+import org.apache.commons.jxpath.xml.DocumentContainer;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Node;
+
+public class JXPath154Test extends JXPathTestCase {
+    public void testGetNamespaceURIWithDocumentNode() {
+        Document doc = new DocumentImpl();
+        Element element = doc.createElementNS("http://example.com", "test");
+        doc.appendChild(element);
+
+        String nsURI = DOMNodePointer.getNamespaceURI(doc);
+        assertEquals("http://example.com", nsURI);
+    }
+
+    public void testGetNamespaceURIWithElementNode() {
+        Document doc = new DocumentImpl();
+        Element element = doc.createElementNS("http://example.com", "test");
+        doc.appendChild(element);
+
+        String nsURI = DOMNodePointer.getNamespaceURI(element);
+        assertEquals("http://example.com", nsURI);
+    }
+
+    public void testGetNamespaceURIWithNullURI() {
+        Document doc = new DocumentImpl();
+        Element element = doc.createElement("test");
+        doc.appendChild(element);
+
+        String nsURI = DOMNodePointer.getNamespaceURI(element);
+        assertNull(nsURI);
+    }
+
+    public void testGetNamespaceURIWithEmptyURI() {
+        Document doc = new DocumentImpl();
+        Element element = doc.createElementNS("", "test");
+        doc.appendChild(element);
+
+        String nsURI = DOMNodePointer.getNamespaceURI(element);
+        assertNull(nsURI);
+    }
+
+    public void testGetNamespaceURIWithAttributeNode() {
+        Document doc = new DocumentImpl();
+        Element element = doc.createElementNS("http://example.com", "test");
+        Attr attr = doc.createAttributeNS("http://example.com", "attr");
+        element.setAttributeNode(attr);
+        doc.appendChild(element);
+
+        String nsURI = DOMNodePointer.getNamespaceURI(attr);
+        assertEquals("http://example.com", nsURI);
+    }
+
+    public void testGetNamespaceURIWithNonElementNode() {
+        Document doc = new DocumentImpl();
+        Node textNode = doc.createTextNode("test");
+
+        String nsURI = DOMNodePointer.getNamespaceURI(textNode);
+        assertNull(nsURI);
+    }
+}
