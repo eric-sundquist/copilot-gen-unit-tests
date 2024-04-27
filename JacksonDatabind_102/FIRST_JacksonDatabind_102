@@ -1,0 +1,101 @@
+package com.fasterxml.jackson.databind.ser.jdk;
+
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.annotation.*;
+import java.util.*;
+import java.text.*;
+import junit.framework.TestCase;
+
+public class DateTimeSerializerBaseTest extends TestCase {
+
+    private SerializerProvider serializers;
+    private BeanProperty property;
+    private DateTimeSerializerBase dateTimeSerializerBase;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        serializers = new ObjectMapper().getSerializerProviderInstance();
+        dateTimeSerializerBase = new DateTimeSerializerBase(true, new SimpleDateFormat("yyyy-MM-dd"));
+    }
+
+    public void testCreateContextual_NullFormat() throws Exception {
+        JsonSerializer<?> serializer = dateTimeSerializerBase.createContextual(serializers, property);
+        assertTrue(serializer instanceof DateTimeSerializerBase);
+    }
+
+    public void testCreateContextual_NumericShape() throws Exception {
+        property = new BeanProperty.Std(PropertyName.construct("date"), 
+            serializers.constructType(java.sql.Date.class), 
+            null, null, 
+            new JsonFormat.Value().withShape(JsonFormat.Shape.NUMBER), 
+            null, null, false);
+        JsonSerializer<?> serializer = dateTimeSerializerBase.createContextual(serializers, property);
+        assertTrue(serializer instanceof DateTimeSerializerBase);
+    }
+
+    public void testCreateContextual_HasPattern() throws Exception {
+        property = new BeanProperty.Std(PropertyName.construct("date"), 
+            serializers.constructType(java.sql.Date.class), 
+            null, null, 
+            new JsonFormat.Value().withPattern("yyyy-MM-dd"), 
+            null, null, false);
+        JsonSerializer<?> serializer = dateTimeSerializerBase.createContextual(serializers, property);
+        assertTrue(serializer instanceof DateTimeSerializerBase);
+    }
+
+    public void testCreateContextual_HasLocale() throws Exception {
+        property = new BeanProperty.Std(PropertyName.construct("date"), 
+            serializers.constructType(java.sql.Date.class), 
+            null, null, 
+            new JsonFormat.Value().withLocale(Locale.US), 
+            null, null, false);
+        JsonSerializer<?> serializer = dateTimeSerializerBase.createContextual(serializers, property);
+        assertTrue(serializer instanceof DateTimeSerializerBase);
+    }
+
+    public void testCreateContextual_HasTimeZone() throws Exception {
+        property = new BeanProperty.Std(PropertyName.construct("date"), 
+            serializers.constructType(java.sql.Date.class), 
+            null, null, 
+            new JsonFormat.Value().withTimeZone(TimeZone.getTimeZone("GMT")), 
+            null, null, false);
+        JsonSerializer<?> serializer = dateTimeSerializerBase.createContextual(serializers, property);
+        assertTrue(serializer instanceof DateTimeSerializerBase);
+    }
+
+    public void testCreateContextual_StringShape() throws Exception {
+        property = new BeanProperty.Std(PropertyName.construct("date"), 
+            serializers.constructType(java.sql.Date.class), 
+            null, null, 
+            new JsonFormat.Value().withShape(JsonFormat.Shape.STRING), 
+            null, null, false);
+        JsonSerializer<?> serializer = dateTimeSerializerBase.createContextual(serializers, property);
+        assertTrue(serializer instanceof DateTimeSerializerBase);
+    }
+
+    public void testCreateContextual_NotSimpleDateFormat() throws Exception {
+        serializers = new ObjectMapper().setDateFormat(new DateFormat() {
+            @Override
+            public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
+                return null;
+            }
+
+            @Override
+            public Date parse(String source, ParsePosition pos) {
+                return null;
+            }
+        }).getSerializerProviderInstance();
+        property = new BeanProperty.Std(PropertyName.construct("date"), 
+            serializers.constructType(java.sql.Date.class), 
+            null, null, 
+            new JsonFormat.Value().withLocale(Locale.US), 
+            null, null, false);
+        try {
+            dateTimeSerializerBase.createContextual(serializers, property);
+            fail("Should have thrown JsonMappingException");
+        } catch (JsonMappingException e) {
+            assertTrue(e.getMessage().contains("Configured `DateFormat`"));
+        }
+    }
+}
