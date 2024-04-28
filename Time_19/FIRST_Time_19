@@ -1,0 +1,46 @@
+package org.joda.time;
+
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+public class TestDateTimeZoneCutover extends TestCase {
+
+    private DateTimeZone testZone;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        testZone = DateTimeZone.forID("America/New_York");
+    }
+
+    public void testGetOffsetFromLocal() {
+        long instantLocal = 1622486400000L; // June 1, 2021 00:00:00 GMT
+        int offset = testZone.getOffsetFromLocal(instantLocal);
+        assertEquals(-14400000, offset); // -4 hours in milliseconds
+
+        instantLocal = 1635724800000L; // November 1, 2021 00:00:00 GMT
+        offset = testZone.getOffsetFromLocal(instantLocal);
+        assertEquals(-18000000, offset); // -5 hours in milliseconds
+    }
+
+    public void testGetOffsetFromLocal_DstBoundary() {
+        long instantLocal = 1615708800000L; // March 14, 2021 02:00:00 GMT
+        int offset = testZone.getOffsetFromLocal(instantLocal);
+        assertEquals(-14400000, offset); // -4 hours in milliseconds
+
+        instantLocal = 1636268400000L; // November 7, 2021 02:00:00 GMT
+        offset = testZone.getOffsetFromLocal(instantLocal);
+        assertEquals(-18000000, offset); // -5 hours in milliseconds
+    }
+
+    public void testGetOffsetFromLocal_NegativeInstant() {
+        long instantLocal = -100000L;
+        int offset = testZone.getOffsetFromLocal(instantLocal);
+        assertEquals(-18000000, offset); // -5 hours in milliseconds
+    }
+
+    public void testGetOffsetFromLocal_ZeroInstant() {
+        long instantLocal = 0L;
+        int offset = testZone.getOffsetFromLocal(instantLocal);
+        assertEquals(-18000000, offset); // -5 hours in milliseconds
+    }
+}
