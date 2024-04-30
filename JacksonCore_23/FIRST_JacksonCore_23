@@ -1,0 +1,35 @@
+package com.fasterxml.jackson.core.util;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+public class TestDefaultPrettyPrinter extends TestCase {
+    private JsonFactory JSON_F;
+
+    public TestDefaultPrettyPrinter(String testName) {
+        super(testName);
+        JSON_F = new JsonFactory();
+    }
+
+    public static TestSuite suite() {
+        return new TestSuite(TestDefaultPrettyPrinter.class);
+    }
+
+    public void testMyPrettyPrinter() {
+        MyPrettyPrinter printer = new MyPrettyPrinter();
+        assertNotNull(printer);
+    }
+
+    public void testJsonFactoryNotNull() {
+        assertNotNull(JSON_F);
+    }
+
+    public void testJsonFactoryInstance() {
+        assertTrue(JSON_F instanceof JsonFactory);
+    }
+
+    @SuppressWarnings("serial")
+    static class MyPrettyPrinter extends DefaultPrettyPrinter { }
+}
